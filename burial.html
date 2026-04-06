@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Noi Kin Trong Long Toi</title>
+    <style>
+        body, html {
+            background-color: #0a0a0a;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Times New Roman', serif;
+            cursor: crosshair;
+        }
+
+        /* Lớp nhiễu tạo cảm giác ngột ngạt */
+        #canvas {
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 1;
+            opacity: 0.15;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Khối mật mã trung tâm - Trông như một bia mộ kỹ thuật số */
+        .cipher-block {
+            color: #1a1a1a;
+            font-size: 10px;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            text-align: center;
+            width: 70%;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* Những mảnh vỡ cảm xúc hiện ra khi di chuyển */
+        .scraps {
+            position: absolute;
+            color: #4a4a4a;
+            font-size: 14px;
+            pointer-events: none;
+            text-shadow: 0 0 10px rgba(255,255,255,0.1);
+            animation: dissolve 3s forwards;
+            font-style: italic;
+        }
+
+        @keyframes dissolve {
+            0% { opacity: 0; transform: translateY(0); filter: blur(5px); }
+            20% { opacity: 0.6; filter: blur(0px); }
+            100% { opacity: 0; transform: translateY(-20px); filter: blur(10px); }
+        }
+
+        .heartbeat {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: #220000;
+            font-size: 10px;
+            letter-spacing: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.2; }
+            50% { opacity: 0.5; color: #500; }
+            100% { opacity: 0.2; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="container" id="main">
+        <div class="cipher-block">
+            01000100 01100001 01110101 00100000 01101110 01101000 01100001 01110100 00100000 01101100 01100001 00100000 01101011 01101000 01101111 01101110 01100111 00100000 01100011 01101111 00100000 01110100 01110101 00100000 01100011 01100001 01100011 01101000 00100000 01100100 01100101 00100000 01100100 01100001 01110101 00101110 <br><br>
+            [ ERROR: UNREQUITED_LOVE_DETECTED ] <br><br>
+            t o i / d a / h o c / c a c h / i m / l a n g / k h i / t h a y / c a u / c u o i / v o i / n g u o i / k h a c . . .
+        </div>
+    </div>
+
+    <div class="heartbeat">- .-. .- .. / - .. -- / -.. .- / ...- ..- -. / ...- --- . (Trái tim đã vụn vỡ)</div>
+
+    <script>
+        const quotes = [
+            "Tớ đứng đây, nhưng cậu chưa bao giờ nhìn thấy tớ.",
+            "Đau nhất là khi cậu kể cho tớ nghe về người cậu yêu.",
+            "Tớ là một dấu chấm phẩy trong câu chuyện của cậu...",
+            "Cậu là cả thế giới, tớ là kẻ lạ đường.",
+            "Chưa bao giờ có tư cách để ghen.",
+            "Chỉ dám chúc cậu hạnh phúc, dù lòng tớ tan nát.",
+            "Yêu đơn phương là tự cầm dao đâm vào tim mình mỗi ngày.",
+            "Tớ xin lỗi vì đã lỡ yêu cậu."
+        ];
+
+        const main = document.getElementById('main');
+
+        // Hiệu ứng "Bóc vảy vết thương"
+        function createScrap(x, y) {
+            const scrap = document.createElement('div');
+            scrap.className = 'scraps';
+            scrap.style.left = x + 'px';
+            scrap.style.top = y + 'px';
+            scrap.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+            main.appendChild(scrap);
+            
+            setTimeout(() => { scrap.remove(); }, 3000);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            if(Math.random() > 0.9) createScrap(e.clientX, e.clientY);
+        });
+
+        window.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            createScrap(touch.clientX, touch.clientY);
+        });
+
+        // Noise Effect
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        function noise() {
+            const idata = ctx.createImageData(canvas.width, canvas.height);
+            const buffer32 = new Uint32Array(idata.data.buffer);
+            for (let i = 0; i < buffer32.length; i++) buffer32[i] = Math.random() < 0.5 ? 0xff111111 : 0xff000000;
+            ctx.putImageData(idata, 0, 0); requestAnimationFrame(noise);
+        }
+        window.onresize = resize; resize(); noise();
+    </script>
+</body>
+</html>
