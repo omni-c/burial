@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES-256 // LOCKED</title>
+    <style>
+        body, html {
+            background-color: #000;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+        }
+
+        .void {
+            width: 85%;
+            max-width: 550px;
+            text-align: center;
+        }
+
+        /* Khối AES Ciphertext: Mờ ảo, lấp ló */
+        .ciphertext {
+            color: #0a0a0a; /* Cực kỳ tối, gần như tàng hình */
+            font-size: 11px;
+            line-height: 1.8;
+            letter-spacing: 1px;
+            word-break: break-all;
+            filter: blur(3px); /* Nhòe như nước mắt */
+            animation: pulse 20s infinite ease-in-out;
+            user-select: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.03; filter: blur(4px); transform: scale(0.99); }
+            50% { opacity: 0.15; filter: blur(1.5px); transform: scale(1); }
+        }
+
+        /* Điểm sáng xa xăm - Biểu tượng cho "Key" đã mất */
+        .key-shadow {
+            position: fixed;
+            bottom: 10%;
+            font-size: 9px;
+            color: #050505;
+            letter-spacing: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="void">
+        <div class="ciphertext">
+            U2FsdGVkX19vLzS8fH7S5wN0ZXJpcyBTZW50aW5lbCAyMDI2CmlmIHlvdSBjYW4gcmVhZCB0aGlzLCBpdCBtZWFucyB5b3UgaGF2ZSB0aGUga2V5IHRvIG15IHBhaW4uIEkgbG92ZWQgeW91IG1vcmUgdGhhbiBteXNlbGYsIGJ1dCB5b3UgbmV2ZXIga25ldy4gVGhlIHNpbGVuY2UgaXMgZWF0aW5nIG1lIGFsaXZlLiBHb29kYnllLCBteSB1bnNwb2tlbiBsb3ZlLgpV2FsdGVkX18r7zL9/8v19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCg==
+        </div>
+    </div>
+
+    <div class="key-shadow">AES-256-CBC // KEY_NOT_FOUND</div>
+
+</body>
+</html>
