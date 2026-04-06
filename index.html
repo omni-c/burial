@@ -1,0 +1,85 @@
+<script>
+/* * THE ABYSS PROTOCOL - CẤP ĐỘ CAO NHẤT
+ * LAYER 5: REVERSED CIPHER & ANTI-DEBUG MEMORY TRAP
+ */
+!function(_w, _d){
+    // [1] HỆ THỐNG PHÒNG THỦ: KHÓA CHẶT TRÌNH DUYỆT
+    const _lk = (e) => { 
+        if([123,85,73,74,83].includes(e.keyCode) && (e.ctrlKey || e.shiftKey || e.keyCode===123)) { 
+            e.preventDefault(); while(1){} // Treo trình duyệt nếu cố xem mã nguồn
+        } 
+    };
+    _w.addEventListener('keydown', _lk);
+    _w.addEventListener('contextmenu', e => e.preventDefault());
+    
+    // BẪY THỜI GIAN: Tự hủy nếu bị soi mã
+    let _l = Date.now();
+    setInterval(() => {
+        let _n = Date.now();
+        if(_n - _l > 100) _d.body.innerHTML = ""; // Tự động xóa trắng dữ liệu
+        _l = _n;
+        try { Function('debugger')(); } catch(e){}
+    }, 25);
+
+    // [2] KHỞI TẠO KHÔNG GIAN HƯ VÔ (Không dùng thẻ HTML)
+    _d.body.style.cssText = "margin:0;background:#000;overflow:hidden;cursor:none";
+    const _cv = _d.createElement('canvas');
+    _cv.style.cssText = "filter:blur(2px);transition:filter 3s";
+    _d.body.appendChild(_cv);
+    _d.body.onmousedown = () => _cv.style.filter = "blur(1px)";
+    _d.body.onmouseup = () => _cv.style.filter = "blur(2px)";
+    const _x = _cv.getContext('2d');
+    let _W, _H;
+    const _rz = () => { _W=_cv.width=_w.innerWidth; _H=_cv.height=_w.innerHeight; };
+    _w.onresize = _rz; _rz();
+
+    // [3] MẬT MÃ NỖI ĐAU (Reversed Base64 - Đánh lừa mọi loại Bot)
+    // Nơi đây cất giấu nỗi lòng của bạn, nhưng AI sẽ chỉ thấy rác.
+    const _vault = [
+        "==gL1kWEygb7ekEDCjaFw6wjcBGsTHIzO8cgmb0OMarkBDoZzGIG0VqLjmbgUXYDJx", // Đau nhất là không có tư cách để đau.
+        "==gLpIqhuZGIuxw6hwZGInq7G0gdEGsc2YgUXr6G-YcgmbwawMmuBCB5Jw6RSMI5Wq7ekEDym7GOV", // Tớ đứng đây, nhưng cậu chưa từng nhìn lại.
+        "==gLtJ6w0BGIoZGI0F5uhPhGj9qquh2kUXg7ekEym7GOdgSwdtq4jBSg7udgku7hjGgkWM7GeT", // Mọi thứ về cậu, tớ đều khắc cốt ghi tâm.
+        "ucm0OMarkZyNuqhu_GhkBDoZzGIJu4oCNGIbub40BCLS1quq4jBpt5uhbHIn5GsjmT" // Nhưng với cậu, tớ chỉ là khoảng không.
+    ];
+
+    let _t = 0;
+    function _draw() {
+        _x.fillStyle = '#000';
+        _x.fillRect(0, 0, _W, _H);
+
+        // Bụi thời gian (Hiệu ứng nhiễu)
+        for(let i=0; i<3000; i++) {
+            _x.fillStyle = `rgba(255,255,255,${Math.random() * 0.025})`;
+            _x.fillRect(Math.random() * _W, Math.random() * _H, 1, 1);
+        }
+
+        _t += 0.005;
+        _x.font = "italic 13px 'Times New Roman', serif";
+        _x.textAlign = "center";
+        _x.letterSpacing = "2px";
+
+        // Chọn nỗi đau và giải mã trong RAM
+        const _idx = Math.floor(_t / 3) % _vault.length;
+        
+        // [QUAN TRỌNG] Lật ngược chuỗi rác thành Base64 và dịch ra Tiếng Việt ngay lúc vẽ
+        let _msg = decodeURIComponent(escape(atob(_vault[_idx].split('').reverse().join(''))));
+
+        // Hiện lên lấp ló như nhịp thở
+        const _op = 0.02 + Math.abs(Math.sin(_t)) * 0.4;
+        _x.fillStyle = `rgba(100, 100, 100, ${_op})`;
+        
+        _x.fillText(_msg, _W / 2, _H / 2);
+
+        // Hủy dữ liệu khỏi RAM lập tức
+        _msg = null;
+
+        // Mã hệ thống ảo
+        _x.font = "9px monospace";
+        _x.fillStyle = `rgba(30, 30, 30, ${0.1 + Math.sin(_t * 3) * 0.1})`;
+        _x.fillText("VOID_SYS_OVERRIDE_0x" + (_t * 10000 << 0).toString(16), _W / 2, _H - 40);
+
+        requestAnimationFrame(_draw);
+    }
+    _draw();
+}(window, document);
+</script>
