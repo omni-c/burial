@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+body{margin:0;background:#000;overflow:hidden}
+canvas{width:100vw;height:100vh}
+</style>
+</head>
+<body>
+
+<canvas id="core"></canvas>
+
+<script>
+
+const seed = crypto.getRandomValues(new Uint32Array(1))[0]
+
+async function boot(){
+
+    const canvas = document
+        .getElementById("core")
+        .transferControlToOffscreen()
+
+    const res = await fetch("engine.bin")
+    const buf = await res.arrayBuffer()
+
+    const key = seed % 255
+    const bytes = new Uint8Array(buf)
+
+    for(let i=0;i<bytes.length;i++){
+        bytes[i] ^= key
+    }
+
+    const blob = new Blob([bytes],{type:"application/javascript"})
+    const url = URL.createObjectURL(blob)
+
+    const worker = new Worker(url)
+
+    worker.postMessage({canvas,seed},[canvas])
+}
+
+boot()
+
+// anti devtools
+setInterval(()=>{
+    if(window.outerWidth - window.innerWidth > 160){
+        location.reload()
+    }
+},1000)
+
+</script>
+
+</body>
+</html>
