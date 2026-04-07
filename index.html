@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>&#8203;</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+background:#000;
+overflow:hidden;
+cursor:none;
+user-select:none
+}
+
+canvas{
+width:100vw;
+height:100vh;
+filter:blur(2px);
+transition:3s
+}
+</style>
+</head>
+
+<body oncontextmenu="return false">
+
+<canvas id="core"></canvas>
+
+<script>
+
+(function(){
+
+// =====================
+// Anti debug
+// =====================
+
+window.onkeydown=e=>{
+if([123,85,73,74].includes(e.keyCode)) e.preventDefault()
+}
+
+setInterval(()=>{
+const t=performance.now()
+debugger
+if(performance.now()-t>120){
+location.reload()
+}
+},1000)
+
+
+// =====================
+// Canvas
+// =====================
+
+const canvas=document.getElementById("core")
+const ctx=canvas.getContext("2d")
+
+function resize(){
+canvas.width=innerWidth
+canvas.height=innerHeight
+}
+resize()
+onresize=resize
+
+
+// =====================
+// Base85 decode
+// =====================
+
+function base85Decode(str){
+
+let bytes=[]
+
+for(let i=0;i<str.length;i+=5){
+
+let chunk=0
+
+for(let j=0;j<5;j++){
+chunk = chunk*85 + (str.charCodeAt(i+j)-33)
+}
+
+bytes.push((chunk>>24)&255)
+bytes.push((chunk>>16)&255)
+bytes.push((chunk>>8)&255)
+bytes.push(chunk&255)
+
+}
+
+return new Uint8Array(bytes)
+
+}
+
+
+// =====================
+// Virtual machine
+// =====================
+
+const opcodes=[
+0,182,3,
+0,204,3,
+0,208,3,
+0,207,3,
+0,209,3,
+0,224,3
+]
+
+function runVM(){
+
+let reg=0
+let out=""
+
+for(let pc=0;pc<opcodes.length;pc+=2){
+
+let cmd=opcodes[pc]
+let val=opcodes[pc+1]
+
+if(cmd===0) reg=val
+
+else if(cmd===3){
+out+=String.fromCharCode(reg-99)
+pc--
+}
+
+}
+
+return out
+
+}
+
+
+// =====================
+// WASM loader
+// =====================
+
+async function loadWASM(){
+
+const wasmCode = new Uint8Array([
+0,97,115,109,1,0,0,0
+])
+
+try{
+
+const wasm = await WebAssembly.instantiate(wasmCode)
+return wasm
+
+}catch{
+
+return null
+
+}
+
+}
+
+
+// =====================
+// Hidden payload
+// =====================
+
+const payload85="9jqo^BlbD-BleB1DJ+*+F(f,q"
+
+const decodedBytes=base85Decode(payload85)
+
+let hidden=runVM()
+
+
+// =====================
+// Render engine
+// =====================
+
+let clock=0
+
+function render(){
+
+ctx.fillStyle="black"
+ctx.fillRect(0,0,canvas.width,canvas.height)
+
+for(let i=0;i<2500;i++){
+
+ctx.fillStyle=`rgba(255,255,255,${Math.random()*0.02})`
+
+ctx.fillRect(
+Math.random()*canvas.width,
+Math.random()*canvas.height,
+1,
+1
+)
+
+}
+
+clock+=0.01
+
+ctx.fillStyle=`rgba(120,120,120,${0.2+Math.sin(clock)*0.2})`
+
+ctx.font="italic 18px serif"
+ctx.textAlign="center"
+
+ctx.fillText(hidden,canvas.width/2,canvas.height/2)
+
+requestAnimationFrame(render)
+
+}
+
+render()
+
+})()
+
+</script>
+
+</body>
+</html>
